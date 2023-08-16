@@ -3,7 +3,10 @@
 // license that can be found in the LICENSE file.
 package btree
 
-import "sync"
+import (
+	"fmt"
+	"sync"
+)
 
 type BTreeG[T any] struct {
 	isoid        uint64
@@ -192,6 +195,7 @@ path_match:
 
 // SetHint sets or replace a value for a key using a path hint
 func (tr *BTreeG[T]) SetHint(item T, hint *PathHint) (prev T, replaced bool) {
+	fmt.Printf("BTreeG set %#v", item)
 	if tr.locks {
 		tr.mu.Lock()
 		prev, replaced = tr.setHint(item, hint)
@@ -416,7 +420,9 @@ func (tr *BTreeG[T]) getHint(key T, hint *PathHint, mut bool) (T, bool) {
 	for {
 		i, found := tr.find(n, key, hint, depth)
 		if found {
-			return n.items[i], true
+			v := n.items[i]
+			fmt.Printf("BTreeG get %#v", v)
+			return v, true
 		}
 		if n.children == nil {
 			return tr.empty, false
