@@ -409,6 +409,7 @@ func (tr *BTreeG[T]) GetHintMut(key T, hint *PathHint) (value T, ok bool) {
 
 // GetHint gets a value for key using a path hint
 func (tr *BTreeG[T]) getHint(key T, hint *PathHint, mut bool) (T, bool) {
+	panic("BTreeG")
 	fmt.Printf("BTreeG %p get\n", tr)
 	if tr.lock(mut) {
 		defer tr.unlock(mut)
