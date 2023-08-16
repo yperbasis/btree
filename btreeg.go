@@ -195,7 +195,6 @@ path_match:
 
 // SetHint sets or replace a value for a key using a path hint
 func (tr *BTreeG[T]) SetHint(item T, hint *PathHint) (prev T, replaced bool) {
-	fmt.Printf("BTreeG %p set %#v", tr, item)
 	if tr.locks {
 		tr.mu.Lock()
 		prev, replaced = tr.setHint(item, hint)
@@ -207,6 +206,7 @@ func (tr *BTreeG[T]) SetHint(item T, hint *PathHint) (prev T, replaced bool) {
 }
 
 func (tr *BTreeG[T]) setHint(item T, hint *PathHint) (prev T, replaced bool) {
+	fmt.Printf("BTreeG %p set %#v\n", tr, item)
 	if tr.root == nil {
 		tr.init(0)
 		tr.root = tr.newNode(true)
@@ -409,6 +409,7 @@ func (tr *BTreeG[T]) GetHintMut(key T, hint *PathHint) (value T, ok bool) {
 
 // GetHint gets a value for key using a path hint
 func (tr *BTreeG[T]) getHint(key T, hint *PathHint, mut bool) (T, bool) {
+	fmt.Printf("BTreeG %p get\n", tr)
 	if tr.lock(mut) {
 		defer tr.unlock(mut)
 	}
@@ -421,7 +422,7 @@ func (tr *BTreeG[T]) getHint(key T, hint *PathHint, mut bool) (T, bool) {
 		i, found := tr.find(n, key, hint, depth)
 		if found {
 			v := n.items[i]
-			fmt.Printf("BTreeG %p get %#v", tr, v)
+			fmt.Printf("BTreeG %p get %#v\n", tr, v)
 			return v, true
 		}
 		if n.children == nil {
